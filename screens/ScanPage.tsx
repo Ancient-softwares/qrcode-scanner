@@ -32,12 +32,14 @@ const App = (): JSX.Element => {
 			body: JSON.stringify({ type, data }),
 		})
 			.then((response) => response.json())
-			.then((response) => alert(`Response: ${response}`))
-			.catch((error) =>
-				alert(
-					`Server erroror: ${error}\nData scanner: ${data} - ${type}`
+			.then((response) => window.alert(`Response: ${response}`))
+			.catch((error) => {
+				window.alert(
+					`Server error: ${error}\nData scanner: ${data} - ${type}`
 				)
-			)
+
+				console.error(error)
+			})
 			.finally(() => {
 				afterScan({
 					type: 0,
