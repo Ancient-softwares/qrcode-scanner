@@ -1,20 +1,24 @@
-import React from 'react';
+import React from 'react'
 import {
-	FlatList,
-	Text,
-	View,
 	ActivityIndicator,
+	Alert,
+	FlatList,
+	Modal,
+	Text,
 	TouchableOpacity,
-} from 'react-native';
-import { SearchBar } from 'react-native-elements';
+	View,
+} from 'react-native'
+import { SearchBar } from 'react-native-elements'
 
-import styles from '../styles';
+import styles from '../styles'
 
 export default function RestrictedPage({ navigation }: any) {
-	const [data, setData] = React.useState<never[]>([]);
-	const [filtered, setFiltered] = React.useState<never[]>([]);
-	const [search, setSearch] = React.useState<string>('');
-	const [loading, setLoading] = React.useState<boolean>(true);
+	const [data, setData] = React.useState<any[]>([])
+	const [filtered, setFiltered] = React.useState<any[]>([])
+	const [search, setSearch] = React.useState<string>('')
+	const [loading, setLoading] = React.useState<boolean>(true)
+	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
+	const [isEdit, setEdit] = React.useState<boolean>(false)
 
 	const searchFilterFunction = (text: string) => {
 		// Check if searched text is not blank
@@ -25,21 +29,21 @@ export default function RestrictedPage({ navigation }: any) {
 				// Applying filter for the inserted text in search bar
 				const itemData = item.data
 					? item.data.toUpperCase()
-					: ''.toUpperCase();
+					: ''.toUpperCase()
 
-				const textData = text.toUpperCase();
+				const textData = text.toUpperCase()
 
-				return itemData.indexOf(textData) > -1;
-			});
-			setFiltered(newData);
-			setSearch(text);
+				return itemData.indexOf(textData) > -1
+			})
+			setFiltered(newData)
+			setSearch(text)
 		} else {
 			// Inserted text is blank
 			// Update FilteredDataSource with masterDataSource
-			setFiltered(data);
-			setSearch(text);
+			setFiltered(data)
+			setSearch(text)
 		}
-	};
+	}
 
 	const getAllScans = async () => {
 		await fetch('http://127.0.0.1:8000/api/scan', {
@@ -52,89 +56,148 @@ export default function RestrictedPage({ navigation }: any) {
 			.then((response) => response.json())
 			.then((json) => {
 				json.scans.forEach((scan: any) => {
-					data.push(scan);
-				});
+					data.push(scan)
+				})
 
-				console.table(data);
+				console.table(data)
 			})
 			.catch((error) => console.error(error))
-			.finally(() => setLoading(false));
-	};
+			.finally(() => setLoading(false))
+	}
 
 	const renderItem = ({ item }: { item: any }): JSX.Element => {
 		return (
-			<View
-				style={[
-					styles.item,
-					styles.row,
-					{
-						backgroundColor:
-							item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
-					},
-				]}
-			>
-				<View
+			<View style={{ width: '100%' }}>
+				<TouchableOpacity
 					style={[
 						styles.item,
 						{
-							backgroundColor:
-								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
+							width: '100%',
+							alignItems: 'flex-start',
 						},
 					]}
+					onPress={() => {
+						setModalVisible(true)
+					}}
 				>
-					<Text
-						style={[
-							styles.listTitle,
-							{
-								fontSize: item.id === 'ID' ? 28 : 24,
-								fontWeight:
-									item.id === 'ID' ? 'bold' : 'normal',
-								color: item.id === 'ID' ? '#000' : '#000',
-							},
-						]}
-					>
-						{item.id}
+					<Text style={styles.title}>
+						<strong>ID:</strong> {item.id}
 					</Text>
-				</View>
-				<View
-					style={[
-						styles.item,
-						{
-							backgroundColor:
-								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
-						},
-					]}
+					<Text style={styles.title}>
+						<strong>Valor:</strong> {item.data}
+					</Text>
+					<Text style={styles.title}>
+						<strong>Tipo:</strong> {item.type}
+					</Text>
+				</TouchableOpacity>
+
+				<Modal
+					animationType='slide'
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {
+						Alert.alert('Modal has been closed.')
+						setModalVisible(!modalVisible)
+					}}
 				>
-					<Text
-						style={[
-							styles.listTitle,
-							{
-								fontSize: item.data === 'DATA' ? 28 : 24,
-								fontWeight:
-									item.data === 'DATA' ? 'bold' : 'normal',
-								color: item.data === 'DATA' ? '#000' : '#000',
-							},
-						]}
-					>
-						{item.data}
-					</Text>
-				</View>
+					<View style={styles.centeredView}>
+						<View style={styles.modalView}>
+							<Text style={styles.listTitle}>
+								Informações sobre a avaliação
+							</Text>
+							<br />
+							<br />
+
+							<View
+								style={{
+									alignItems: 'flex-start',
+								}}
+							>
+								<Text style={styles.lilText}>
+									<strong>ID:</strong> {item.id}
+								</Text>
+								<Text style={styles.lilText}>
+									<strong>Valor:</strong> {item.data}
+								</Text>
+								<Text style={styles.lilText}>
+									<strong>Tipo:</strong> {item.type}
+								</Text>
+								<Text style={styles.lilText}>
+									<strong>Visitante:</strong> {item.name}
+								</Text>
+								<Text style={styles.lilText}>
+									<strong>Criado em:</strong>{' '}
+									{item.created_at.split('T')[0]}
+								</Text>
+								<Text style={styles.lilText}>
+									<strong>Atualizado em:</strong>{' '}
+									{item.uploaded_at}
+								</Text>
+							</View>
+							<View style={[styles.row, { marginBottom: 15 }]}>
+								<TouchableOpacity
+									style={[
+										styles.button,
+										{ padding: 4, marginHorizontal: 6 },
+									]}
+									onPress={() =>
+										setModalVisible(!modalVisible)
+									}
+								>
+									<Text style={[styles.modalText]}>
+										{' '}
+										Fechar{' '}
+									</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={[
+										styles.button,
+										{ padding: 4, marginHorizontal: 6 },
+									]}
+									onPress={async () => {
+										await fetch(
+											`http://localhost:8000/api/scans/${item.id}`,
+											{
+												method: 'DELETE',
+												headers: {
+													Accept: 'application/json',
+													'Content-Type':
+														'application/json',
+												},
+											}
+										)
+											.then(
+												(
+													response: Response
+												): Promise<JSON> =>
+													response.json()
+											)
+											.then((json: JSON): void =>
+												window.alert(
+													'QRCode deletada com successo!'
+												)
+											)
+											.catch((error: Error): void =>
+												console.error(error)
+											)
+									}}
+								>
+									<Text style={[styles.modalText]}>
+										{' '}
+										Deletar{' '}
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+				</Modal>
 			</View>
-		);
-	};
+		)
+	}
 
 	React.useEffect(() => {
-		getAllScans();
-		const headers = {
-			id: 'ID',
-			data: 'DATA',
-			qrType: 'TYPE',
-			created_at: 'CREATED AT',
-			updated_at: 'UPDATED AT',
-		};
-
-		data.push(headers);
-	}, []);
+		getAllScans()
+	}, [])
 
 	return (
 		<View style={[styles.container, { backgroundColor: '#fff' }]}>
@@ -143,12 +206,14 @@ export default function RestrictedPage({ navigation }: any) {
 			) : (
 				<View style={styles.container}>
 					<SearchBar
-						placeholder="Pesquisar QRCodes..."
+						placeholder='Pesquisar QRCodes...'
 						lightTheme
-						platform="android"
+						platform='android'
 						round
 						value={search}
-						onChangeText={(text) => searchFilterFunction(text)}
+						onChangeText={(text: string) =>
+							searchFilterFunction(text)
+						}
 						autoCorrect={false}
 						blurOnSubmit={true}
 						autoFocus={true}
@@ -182,5 +247,5 @@ export default function RestrictedPage({ navigation }: any) {
 				</View>
 			)}
 		</View>
-	);
+	)
 }

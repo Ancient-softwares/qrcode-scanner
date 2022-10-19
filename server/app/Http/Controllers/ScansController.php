@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ScanModel;
+use Illuminate\Contracts\View\View;
+use \Illuminate\Http\Response;
 
 class ScansController extends Controller
 {
@@ -19,14 +21,9 @@ class ScansController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        $scans = ScanModel::all();
-
-        return response([
-            'scans' => $scans,
-            'message' => 'Retrieved successfully'
-        ], 200);
+        return view('scans.index', compact(['scans' => $this->scans->all()]));
     }
 
     /**
@@ -34,7 +31,7 @@ class ScansController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request): Response
     {
         $query = $this->scans->create([
             'data' => $request->data,
@@ -55,7 +52,7 @@ class ScansController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         try {
 
@@ -88,6 +85,12 @@ class ScansController extends Controller
                 ]);
             }
         }
+
+        return response([
+            'status' => 500,
+            'message' => 'Data failed to save',
+            'data' => $query . json_encode($request),
+        ]);
     }
 
     /**
@@ -96,7 +99,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): Response
     {
         $scans = ScanModel::all();
 
@@ -112,7 +115,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, $id): Response
     {
         return response([
             'message' => 'LOL'
@@ -126,7 +129,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): Response
     {
         $actualData = ScanModel::find($id);
 
@@ -192,7 +195,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): Response
     {
         // $query = $this->scan->where('id', $id)->delete();
         $query = ScanModel::where('id', $id)->delete();
