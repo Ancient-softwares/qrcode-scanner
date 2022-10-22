@@ -35,8 +35,6 @@ class ScansController extends Controller
     {
         $query = $this->scans->create([
             'data' => $request->data,
-            'type' => $request->type,
-            'name' => $request->name
         ]);
 
         if ($query) {
@@ -58,22 +56,20 @@ class ScansController extends Controller
 
             $query = ScanModel::create([
                 'data' => $request->data,
-                'type' => $request->type,
-                'name' => $request->name
             ]);
 
             if ($query) {
                 return response([
                     'status' => 200,
                     'message' => 'Data saved successfully',
-                    'data' => $query . json_encode($request),
+                    'data' => $request->all(),
                 ]);
             } else {
 
                 return response([
                     'status' => 500,
                     'message' => 'Data failed to save',
-                    'data' => $query . json_encode($request),
+                    'data' => $request->all(),
                 ]);
             }
         } catch (\Exception $e) {
@@ -89,7 +85,7 @@ class ScansController extends Controller
         return response([
             'status' => 500,
             'message' => 'Data failed to save',
-            'data' => $query . json_encode($request),
+            'data' => $request->all(),
         ]);
     }
 
@@ -99,7 +95,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id): Response
+    public function show(): Response
     {
         $scans = ScanModel::all();
 
@@ -133,24 +129,17 @@ class ScansController extends Controller
     {
         $actualData = ScanModel::find($id);
 
-        echo $actualData->type;
 
         if ($request->isMethod('patch')) {
-            if ($request->data && !$request->type) {
+            if ($request->data) {
                 $query = ScanModel::where('id', $id)->update([
                     'data' => $request->data,
-                    'type' => $actualData->type
                 ]);
 
                 return response([
                     'status' => 200,
                     'message' => 'Data updated successfully',
                     'data' => $query . json_encode($request),
-                ]);
-            } else if ($request->type && !$request->data) {
-                $query = ScanModel::where('id', $id)->update([
-                    'type' => $request->type,
-                    'data' => $actualData->data
                 ]);
             } else {
                 return response([
@@ -159,20 +148,9 @@ class ScansController extends Controller
                     'data' => json_encode($request),
                 ]);
             }
-            $query = ScanModel::where('id', $id)->update([
-                'data' => $request->data,
-                'type' => $request->type
-            ]);
-
-            return response([
-                'status' => 200,
-                'message' => 'Data updated successfully',
-                'data' => $query . json_encode($request),
-            ]);
         } else if ($request->isMethod('put')) {
             $query = ScanModel::where('id', $id)->update([
                 'data' => $request->data,
-                'type' => $request->type
             ]);
 
             return response([

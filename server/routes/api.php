@@ -21,12 +21,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Path: server/routes/web.php
 
-Route::get('/scan', [ScansController::class , 'index'])->name('scan.index');
+route::get('/scans', [ScansController::class, 'show'])->name('show');
 
-Route::post('/scan', [ScansController::class , 'store'])->name('scan.store');
+Route::get('/scan', [ScansController::class, 'index'])->name('scan.index');
 
-Route::put('/scan/{id}', [ScansController::class , 'update'])->name('scan.update');
+Route::post('/scan', [ScansController::class, 'store'])->name('scan.store');
 
-Route::patch('/scan/{id}', [ScansController::class , 'update'])->name('scan.update');
+Route::put('/scan/{id}', [ScansController::class, 'update'])->name('scan.update');
 
-Route::delete('/scan/{id}', [ScansController::class , 'destroy'])->name('scan.destroy');
+Route::patch('/scan/{id}', [ScansController::class, 'update'])->name('scan.update');
+
+Route::delete('/scan/{id}', [ScansController::class, 'destroy'])->name('scan.destroy');

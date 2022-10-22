@@ -14,11 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('scans', function (Blueprint $table) {
+        Schema::create('tbscans', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('data')->unique();
-            $table->string('type');
-            $table->string('name')->nullabe()->default(null);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
