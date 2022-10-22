@@ -31,7 +31,7 @@ const App = (): JSX.Element => {
 		})
 			.then((response: Response): Promise<JSON> => response.json())
 			.then((response: JSON): void => {
-				window.alert(`Response: ${response}`)
+				window.alert(`Operação: ${response.message}`)
 
 				console.log(response)
 			})

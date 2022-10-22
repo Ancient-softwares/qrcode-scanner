@@ -61,14 +61,14 @@ class ScansController extends Controller
             if ($query) {
                 return response([
                     'status' => 200,
-                    'message' => 'Data saved successfully',
+                    'message' => 'QRCode salvo com sucesso',
                     'data' => $request->all(),
                 ]);
             } else {
 
                 return response([
                     'status' => 500,
-                    'message' => 'Data failed to save',
+                    'message' => 'Erro ao salvar QRCode',
                     'data' => $request->all(),
                 ]);
             }
@@ -84,7 +84,7 @@ class ScansController extends Controller
 
         return response([
             'status' => 500,
-            'message' => 'Data failed to save',
+            'message' => 'Erro ao salvar QRCode',
             'data' => $request->all(),
         ]);
     }
@@ -101,7 +101,7 @@ class ScansController extends Controller
 
         return response([
             'scans' => $scans,
-            'message' => 'Retrieved successfully'
+            'message' => 'Dados retornados com sucesso',
         ], 200);
     }
 
@@ -138,13 +138,13 @@ class ScansController extends Controller
 
                 return response([
                     'status' => 200,
-                    'message' => 'Data updated successfully',
+                    'message' => 'QRCode atualizado com sucesso',
                     'data' => $query . json_encode($request),
                 ]);
             } else {
                 return response([
                     'status' => 500,
-                    'message' => 'Data failed to update',
+                    'message' => 'QRCode não atualizado',
                     'data' => json_encode($request),
                 ]);
             }
@@ -155,13 +155,13 @@ class ScansController extends Controller
 
             return response([
                 'status' => 200,
-                'message' => 'Data updated successfully',
+                'message' => 'QRCode atualizado com sucesso',
                 'data' => $query . json_encode($request),
             ]);
         } else {
             return response([
                 'status' => 500,
-                'message' => 'Invalid request method',
+                'message' => 'QRCode não atualizado',
                 'data' => json_encode($request),
             ]);
         }
