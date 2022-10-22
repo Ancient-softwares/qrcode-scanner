@@ -46,7 +46,7 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	const getAllScans = async () => {
-		await fetch('http://127.0.0.1:8000/api/scans', {
+		await fetch('https://2c61-168-232-160-61.sa.ngrok.io/api/scans', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export default function RestrictedPage({ navigation }: any) {
 			.then((response) => response.json())
 			.then((json) => {
 				json.scans.forEach((scan: any) => {
-					data.push(scan)
+					data.push()
 				})
 
 				console.table(data)
@@ -147,7 +147,7 @@ export default function RestrictedPage({ navigation }: any) {
 									]}
 									onPress={async () => {
 										await fetch(
-											`http://localhost:8000/api/scans/${item.id}`,
+											`https://2c61-168-232-160-61.sa.ngrok.io/api/scan/${item.id}`,
 											{
 												method: 'DELETE',
 												headers: {

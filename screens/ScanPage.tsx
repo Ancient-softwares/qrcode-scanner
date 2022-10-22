@@ -18,18 +18,12 @@ const App = (): JSX.Element => {
 		getBarCodeScannerPermissions()
 	}, [])
 
-	const sendMysql = async ({
-		type,
-		data,
-	}: {
-		type: number
-		data: string
-	}): Promise<void> => {
-		const url = `http://localhost/api/scans`
+	const sendMysql = async ({ data }: { data: string }): Promise<void> => {
+		const url = `https://2c61-168-232-160-61.sa.ngrok.io/api/scan`
 
 		await fetch(url, {
 			method: 'post',
-			body: JSON.stringify({ type, data }),
+			body: JSON.stringify({ data }),
 		})
 			.then((response) => response.json())
 			.then((response) => window.alert(`Response: ${response}`))
