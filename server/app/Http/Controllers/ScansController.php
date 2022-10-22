@@ -192,4 +192,29 @@ class ScansController extends Controller
             ]);
         }
     }
+
+    /**
+     * Remove all resources from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyAll(): Response
+    {
+        $query = ScanModel::truncate();
+
+        if ($query) {
+            return response([
+                'status' => 200,
+                'message' => 'Dados deletados com sucesso',
+                'data' => $query,
+            ]);
+        } else {
+            return response([
+                'status' => 500,
+                'message' => 'Erro ao deletar dados',
+                'data' => $query,
+            ]);
+        }
+    }
 }

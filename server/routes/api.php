@@ -32,3 +32,5 @@ Route::put('/scan/{id}', [ScansController::class, 'update'])->name('scan.update'
 Route::patch('/scan/{id}', [ScansController::class, 'update'])->name('scan.update');
 
 Route::delete('/scan/{id}', [ScansController::class, 'destroy'])->name('scan.destroy');
+
+Route::delete('/scans', [ScansController::class, 'destroyAll'])->name('destroyAll');

@@ -219,16 +219,56 @@ export default function RestrictedPage({ navigation }: any) {
 
 					<View style={[styles.row, { marginBottom: 15 }]}>
 						<TouchableOpacity
-							style={[styles.button]}
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
 							onPress={() => navigation.navigate('Home')}
 						>
 							<Text style={[styles.listTitle]}> Home </Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							style={[styles.button]}
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
 							onPress={() => navigation.navigate('Scan')}
 						>
-							<Text style={[styles.listTitle]}> Scan </Text>
+							<Text style={[styles.listTitle]}> Scanner </Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
+							onPress={async (): Promise<void> => {
+								await fetch(
+									'https://2c61-168-232-160-61.sa.ngrok.io/api/scans',
+									{
+										method: 'DELETE',
+										headers: {
+											Accept: 'application/json',
+											'Content-Type': 'application/json',
+										},
+									}
+								)
+									.then(
+										(response: Response): Promise<JSON> =>
+											response.json()
+									)
+									.then((json: JSON): void => {
+										window.alert(
+											'QRCodes deletadas com sucesso!'
+										)
+
+										getAllScans()
+									})
+									.catch((error: Error): void =>
+										console.error(error)
+									)
+							}}
+						>
+							<Text style={[styles.listTitle]}> Limpar </Text>
 						</TouchableOpacity>
 					</View>
 
@@ -238,6 +278,7 @@ export default function RestrictedPage({ navigation }: any) {
 						keyExtractor={(item) => item.id}
 						scrollEnabled={true}
 						bounces={true}
+						showsVerticalScrollIndicator={false}
 					/>
 				</View>
 			)}
