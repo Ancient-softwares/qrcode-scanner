@@ -83,8 +83,18 @@ export default function RestrictedPage({ navigation }: any) {
 						setModalVisible(true)
 					}}
 				>
-					<Text style={styles.title}>ID: {item.id}</Text>
-					<Text style={styles.title}>Valor: {item.data}</Text>
+					<Text style={[styles.title, { fontWeight: 'bold' }]}>
+						ID:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
+						{item.id}
+					</Text>
+					<Text style={[styles.title, { fontWeight: 'bold' }]}>
+						Valor:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
+						{item.data}
+					</Text>
 				</TouchableOpacity>
 
 				<Modal
@@ -97,28 +107,28 @@ export default function RestrictedPage({ navigation }: any) {
 				>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<Text style={styles.listTitle}>
-								Informações sobre a avaliação
+							<Text
+								style={[styles.listTitle, { marginBottom: 10 }]}
+							>
+								Informações sobre o QR Code
 							</Text>
-							<br />
-							<br />
 
 							<View
 								style={{
 									alignItems: 'flex-start',
 								}}
 							>
-								<Text style={styles.lilText}>ID {item.id}</Text>
 								<Text style={styles.lilText}>
-									Valor {item.data}
+									ID: {item.id}
 								</Text>
 								<Text style={styles.lilText}>
-									Criado em
-									{item.created_at.split('T')[0]}
+									Valor: {item.data}
 								</Text>
 								<Text style={styles.lilText}>
-									Atualizado em
-									{item.uploaded_at}
+									Criado: {item.created_at.split('T')[0]}
+								</Text>
+								<Text style={styles.lilText}>
+									Atualizado: {item.updated_at.split('T')[0]}
 								</Text>
 							</View>
 							<View style={[styles.row, { marginBottom: 15 }]}>
