@@ -1,7 +1,6 @@
 import React from 'react'
 import {
 	ActivityIndicator,
-	Alert,
 	FlatList,
 	Modal,
 	Text,
@@ -18,7 +17,6 @@ export default function RestrictedPage({ navigation }: any) {
 	const [search, setSearch] = React.useState<string>('')
 	const [loading, setLoading] = React.useState<boolean>(true)
 	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
-	const [isEdit, setEdit] = React.useState<boolean>(false)
 
 	const searchFilterFunction = (text: string) => {
 		// Check if searched text is not blank
@@ -54,16 +52,20 @@ export default function RestrictedPage({ navigation }: any) {
 				Accept: 'application/json',
 			},
 		})
-			.then((response) => response.json())
-			.then((json) => {
-				json.scans.forEach((scan: any) => {
+			.then((response: Response): Promise<JSON> => response.json())
+			.then((json: any): void => {
+				console.log(json.scans)
+
+				json.scans.forEach((scan: Array<Object>) => {
 					data.push(scan)
+
+					console.log(scan)
 				})
 
 				console.table(data)
 			})
-			.catch((error) => console.error(error))
-			.finally(() => setLoading(false))
+			.catch((error: Error): void => console.error(error))
+			.finally((): void => setLoading(false))
 	}
 
 	const renderItem = ({ item }: { item: any }): JSX.Element => {
@@ -81,12 +83,8 @@ export default function RestrictedPage({ navigation }: any) {
 						setModalVisible(true)
 					}}
 				>
-					<Text style={styles.title}>
-						<strong>ID:</strong> {item.id}
-					</Text>
-					<Text style={styles.title}>
-						<strong>Valor:</strong> {item.data}
-					</Text>
+					<Text style={styles.title}>ID: {item.id}</Text>
+					<Text style={styles.title}>Valor: {item.data}</Text>
 				</TouchableOpacity>
 
 				<Modal
@@ -94,7 +92,6 @@ export default function RestrictedPage({ navigation }: any) {
 					transparent={true}
 					visible={modalVisible}
 					onRequestClose={() => {
-						Alert.alert('Modal has been closed.')
 						setModalVisible(!modalVisible)
 					}}
 				>
@@ -111,18 +108,16 @@ export default function RestrictedPage({ navigation }: any) {
 									alignItems: 'flex-start',
 								}}
 							>
+								<Text style={styles.lilText}>ID {item.id}</Text>
 								<Text style={styles.lilText}>
-									<strong>ID:</strong> {item.id}
+									Valor {item.data}
 								</Text>
 								<Text style={styles.lilText}>
-									<strong>Valor:</strong> {item.data}
-								</Text>
-								<Text style={styles.lilText}>
-									<strong>Criado em:</strong>{' '}
+									Criado em
 									{item.created_at.split('T')[0]}
 								</Text>
 								<Text style={styles.lilText}>
-									<strong>Atualizado em:</strong>{' '}
+									Atualizado em
 									{item.uploaded_at}
 								</Text>
 							</View>
@@ -137,8 +132,7 @@ export default function RestrictedPage({ navigation }: any) {
 									}
 								>
 									<Text style={[styles.modalText]}>
-										{' '}
-										Fechar{' '}
+										Fechar
 									</Text>
 								</TouchableOpacity>
 								<TouchableOpacity
@@ -175,8 +169,7 @@ export default function RestrictedPage({ navigation }: any) {
 									}}
 								>
 									<Text style={[styles.modalText]}>
-										{' '}
-										Deletar{' '}
+										Deletar
 									</Text>
 								</TouchableOpacity>
 							</View>
