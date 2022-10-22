@@ -48,6 +48,7 @@ export default function RestrictedPage({ navigation }: any) {
 	const getAllScans = async () => {
 		await fetch('https://2c61-168-232-160-61.sa.ngrok.io/api/scans', {
 			method: 'GET',
+			mode: 'no-cors',
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
@@ -56,7 +57,7 @@ export default function RestrictedPage({ navigation }: any) {
 			.then((response) => response.json())
 			.then((json) => {
 				json.scans.forEach((scan: any) => {
-					data.push()
+					data.push(scan)
 				})
 
 				console.table(data)
