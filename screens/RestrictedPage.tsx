@@ -46,7 +46,7 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	const getAllScans = async () => {
-		await fetch('http://127.0.0.1:8000/api/scan', {
+		await fetch('http://127.0.0.1:8000/api/scans', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -86,9 +86,6 @@ export default function RestrictedPage({ navigation }: any) {
 					<Text style={styles.title}>
 						<strong>Valor:</strong> {item.data}
 					</Text>
-					<Text style={styles.title}>
-						<strong>Tipo:</strong> {item.type}
-					</Text>
 				</TouchableOpacity>
 
 				<Modal
@@ -118,12 +115,6 @@ export default function RestrictedPage({ navigation }: any) {
 								</Text>
 								<Text style={styles.lilText}>
 									<strong>Valor:</strong> {item.data}
-								</Text>
-								<Text style={styles.lilText}>
-									<strong>Tipo:</strong> {item.type}
-								</Text>
-								<Text style={styles.lilText}>
-									<strong>Visitante:</strong> {item.name}
 								</Text>
 								<Text style={styles.lilText}>
 									<strong>Criado em:</strong>{' '}
