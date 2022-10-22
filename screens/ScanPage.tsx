@@ -23,10 +23,18 @@ const App = (): JSX.Element => {
 
 		await fetch(url, {
 			method: 'post',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify({ data }),
 		})
-			.then((response) => response.json())
-			.then((response) => window.alert(`Response: ${response}`))
+			.then((response: Response): Promise<JSON> => response.json())
+			.then((response: JSON): void => {
+				window.alert(`Response: ${response}`)
+
+				console.log(response)
+			})
 			.catch((error) => {
 				window.alert(
 					`Server error: ${error}\nData scanner: ${data} - ${type}`
