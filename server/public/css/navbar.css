@@ -1,0 +1,49 @@
+body {
+    background-color: #1C3879;
+    font-family: "Open Sans", sans-serif;
+    color: #000000;
+}
+
+
+  .navbar-custom {
+    background-color: #607EAA;
+  }
+
+  .texto{
+    text-align: center;
+    margin-top: 4%;
+    color: #C4DDFF;
+  }
+
+
+  .table-custom{
+
+    background: #7FB5FF;
+    border-radius: 35px;
+  }
+
+  .tabela{
+
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 3.2%;
+  }
+
+  
+
+
+
+  .btn-custom{
+
+    margin-left: 47%;
+
+  }
+
+
+    .tabela-categoria{
+
+      width: 90%;
+      margin-left: 5%;
+      margin-top: 3.2%;
+    }
+    

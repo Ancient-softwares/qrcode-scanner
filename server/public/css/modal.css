@@ -1,0 +1,38 @@
+
+  .form-custom{
+
+    background-color: #95bbef;
+    text-align: center;
+    align-items: center;
+  }
+
+   input[type="text"]:empty,
+   input[type="file"]:empty,
+   input[type="select"]:empty,
+   input[type="number"]:empty {
+      background-color: #95bbef;
+      -webkit-transition: all 0.2s ease;
+      transition: all 0.2s ease;
+    }
+
+
+    .modal-custom{
+
+        background-color: #7FB5FF;
+        text-align: center;
+        align-items: center;
+    
+      }
+
+
+      .btn-custom-card{
+        margin-left: 60%;
+      }
+
+      .btn-custom-editar{
+        margin-right: 67% ;
+      }
+
+      .btn-custom-excluir{
+        margin-right: 65% ;
+      }
