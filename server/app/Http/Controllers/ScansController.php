@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ScanModel;
+use Illuminate\Contracts\View\View;
+use \Illuminate\Http\Response;
 
 class ScansController extends Controller
 {
@@ -19,14 +21,9 @@ class ScansController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        $scans = ScanModel::all();
-
-        return response([
-            'scans' => $scans,
-            'message' => 'Retrieved successfully'
-        ], 200);
+        return view('scans.index', compact(['scans' => $this->scans->all()]));
     }
 
     /**
@@ -34,12 +31,10 @@ class ScansController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request): Response
     {
         $query = $this->scans->create([
             'data' => $request->data,
-            'type' => $request->type,
-            'name' => $request->name
         ]);
 
         if ($query) {
@@ -55,28 +50,26 @@ class ScansController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         try {
 
             $query = ScanModel::create([
                 'data' => $request->data,
-                'type' => $request->type,
-                'name' => $request->name
             ]);
 
             if ($query) {
                 return response([
                     'status' => 200,
-                    'message' => 'Data saved successfully',
-                    'data' => $query . json_encode($request),
+                    'message' => 'QRCode salvo com sucesso',
+                    'data' => $request->all(),
                 ]);
             } else {
 
                 return response([
                     'status' => 500,
-                    'message' => 'Data failed to save',
-                    'data' => $query . json_encode($request),
+                    'message' => 'Erro ao salvar QRCode',
+                    'data' => $request->all(),
                 ]);
             }
         } catch (\Exception $e) {
@@ -88,6 +81,12 @@ class ScansController extends Controller
                 ]);
             }
         }
+
+        return response([
+            'status' => 500,
+            'message' => 'Erro ao salvar QRCode',
+            'data' => $request->all(),
+        ]);
     }
 
     /**
@@ -96,13 +95,13 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(): Response
     {
         $scans = ScanModel::all();
 
         return response([
             'scans' => $scans,
-            'message' => 'Retrieved successfully'
+            'message' => 'Dados retornados com sucesso',
         ], 200);
     }
 
@@ -112,7 +111,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, $id): Response
     {
         return response([
             'message' => 'LOL'
@@ -126,61 +125,43 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): Response
     {
         $actualData = ScanModel::find($id);
 
-        echo $actualData->type;
 
         if ($request->isMethod('patch')) {
-            if ($request->data && !$request->type) {
+            if ($request->data) {
                 $query = ScanModel::where('id', $id)->update([
                     'data' => $request->data,
-                    'type' => $actualData->type
                 ]);
 
                 return response([
                     'status' => 200,
-                    'message' => 'Data updated successfully',
+                    'message' => 'QRCode atualizado com sucesso',
                     'data' => $query . json_encode($request),
-                ]);
-            } else if ($request->type && !$request->data) {
-                $query = ScanModel::where('id', $id)->update([
-                    'type' => $request->type,
-                    'data' => $actualData->data
                 ]);
             } else {
                 return response([
                     'status' => 500,
-                    'message' => 'Data failed to update',
+                    'message' => 'QRCode não atualizado',
                     'data' => json_encode($request),
                 ]);
             }
-            $query = ScanModel::where('id', $id)->update([
-                'data' => $request->data,
-                'type' => $request->type
-            ]);
-
-            return response([
-                'status' => 200,
-                'message' => 'Data updated successfully',
-                'data' => $query . json_encode($request),
-            ]);
         } else if ($request->isMethod('put')) {
             $query = ScanModel::where('id', $id)->update([
                 'data' => $request->data,
-                'type' => $request->type
             ]);
 
             return response([
                 'status' => 200,
-                'message' => 'Data updated successfully',
+                'message' => 'QRCode atualizado com sucesso',
                 'data' => $query . json_encode($request),
             ]);
         } else {
             return response([
                 'status' => 500,
-                'message' => 'Invalid request method',
+                'message' => 'QRCode não atualizado',
                 'data' => json_encode($request),
             ]);
         }
@@ -192,7 +173,7 @@ class ScansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): Response
     {
         // $query = $this->scan->where('id', $id)->delete();
         $query = ScanModel::where('id', $id)->delete();
@@ -207,6 +188,31 @@ class ScansController extends Controller
             return response([
                 'status' => 500,
                 'message' => 'Data failed to delete',
+                'data' => $query,
+            ]);
+        }
+    }
+
+    /**
+     * Remove all resources from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyAll(): Response
+    {
+        $query = ScanModel::truncate();
+
+        if ($query) {
+            return response([
+                'status' => 200,
+                'message' => 'Dados deletados com sucesso',
+                'data' => $query,
+            ]);
+        } else {
+            return response([
+                'status' => 500,
+                'message' => 'Erro ao deletar dados',
                 'data' => $query,
             ]);
         }

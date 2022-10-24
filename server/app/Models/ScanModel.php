@@ -9,11 +9,9 @@ class ScanModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'scans';
+    protected $table = 'tbscans';
 
     protected $fillable = [
         'data',
-        'type',
-        'name'
     ];
 }

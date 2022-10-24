@@ -1,20 +1,22 @@
-import React from 'react';
+import React from 'react'
 import {
-	FlatList,
-	Text,
-	View,
 	ActivityIndicator,
+	FlatList,
+	Modal,
+	Text,
 	TouchableOpacity,
-} from 'react-native';
-import { SearchBar } from 'react-native-elements';
+	View,
+} from 'react-native'
+import { SearchBar } from 'react-native-elements'
 
-import styles from '../styles';
+import styles from '../styles'
 
 export default function RestrictedPage({ navigation }: any) {
-	const [data, setData] = React.useState<never[]>([]);
-	const [filtered, setFiltered] = React.useState<never[]>([]);
-	const [search, setSearch] = React.useState<string>('');
-	const [loading, setLoading] = React.useState<boolean>(true);
+	const [data, setData] = React.useState<any[]>([])
+	const [filtered, setFiltered] = React.useState<any[]>([])
+	const [search, setSearch] = React.useState<string>('')
+	const [loading, setLoading] = React.useState<boolean>(true)
+	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
 
 	const searchFilterFunction = (text: string) => {
 		// Check if searched text is not blank
@@ -25,116 +27,172 @@ export default function RestrictedPage({ navigation }: any) {
 				// Applying filter for the inserted text in search bar
 				const itemData = item.data
 					? item.data.toUpperCase()
-					: ''.toUpperCase();
+					: ''.toUpperCase()
 
-				const textData = text.toUpperCase();
+				const textData = text.toUpperCase()
 
-				return itemData.indexOf(textData) > -1;
-			});
-			setFiltered(newData);
-			setSearch(text);
+				return itemData.indexOf(textData) > -1
+			})
+			setFiltered(newData)
+			setSearch(text)
 		} else {
 			// Inserted text is blank
 			// Update FilteredDataSource with masterDataSource
-			setFiltered(data);
-			setSearch(text);
+			setFiltered(data)
+			setSearch(text)
 		}
-	};
+	}
 
 	const getAllScans = async () => {
-		await fetch('http://127.0.0.1:8000/api/scan', {
+		await fetch('https://2c61-168-232-160-61.sa.ngrok.io/api/scans', {
 			method: 'GET',
+			mode: 'no-cors',
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
 			},
 		})
-			.then((response) => response.json())
-			.then((json) => {
-				json.scans.forEach((scan: any) => {
-					data.push(scan);
-				});
+			.then((response: Response): Promise<JSON> => response.json())
+			.then((json: any): void => {
+				console.log(json.scans)
 
-				console.table(data);
+				json.scans.forEach((scan: Array<Object>) => {
+					data.push(scan)
+
+					console.log(scan)
+				})
+
+				console.table(data)
 			})
-			.catch((error) => console.error(error))
-			.finally(() => setLoading(false));
-	};
+			.catch((error: Error): void => console.error(error))
+			.finally((): void => setLoading(false))
+	}
 
 	const renderItem = ({ item }: { item: any }): JSX.Element => {
 		return (
-			<View
-				style={[
-					styles.item,
-					styles.row,
-					{
-						backgroundColor:
-							item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
-					},
-				]}
-			>
-				<View
+			<View style={{ width: '100%' }}>
+				<TouchableOpacity
 					style={[
 						styles.item,
 						{
-							backgroundColor:
-								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
+							width: '100%',
+							alignItems: 'flex-start',
 						},
 					]}
+					onPress={() => {
+						setModalVisible(true)
+					}}
 				>
-					<Text
-						style={[
-							styles.listTitle,
-							{
-								fontSize: item.id === 'ID' ? 28 : 24,
-								fontWeight:
-									item.id === 'ID' ? 'bold' : 'normal',
-								color: item.id === 'ID' ? '#000' : '#000',
-							},
-						]}
-					>
+					<Text style={[styles.title, { fontWeight: 'bold' }]}>
+						ID:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
 						{item.id}
 					</Text>
-				</View>
-				<View
-					style={[
-						styles.item,
-						{
-							backgroundColor:
-								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
-						},
-					]}
-				>
-					<Text
-						style={[
-							styles.listTitle,
-							{
-								fontSize: item.data === 'DATA' ? 28 : 24,
-								fontWeight:
-									item.data === 'DATA' ? 'bold' : 'normal',
-								color: item.data === 'DATA' ? '#000' : '#000',
-							},
-						]}
-					>
+					<Text style={[styles.title, { fontWeight: 'bold' }]}>
+						Valor:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
 						{item.data}
 					</Text>
-				</View>
+				</TouchableOpacity>
+
+				<Modal
+					animationType='slide'
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {
+						setModalVisible(!modalVisible)
+					}}
+				>
+					<View style={styles.centeredView}>
+						<View style={styles.modalView}>
+							<Text
+								style={[styles.listTitle, { marginBottom: 10 }]}
+							>
+								Informações sobre o QR Code
+							</Text>
+
+							<View
+								style={{
+									alignItems: 'flex-start',
+								}}
+							>
+								<Text style={styles.lilText}>
+									ID: {item.id}
+								</Text>
+								<Text style={styles.lilText}>
+									Valor: {item.data}
+								</Text>
+								<Text style={styles.lilText}>
+									Criado: {item.created_at.split('T')[0]}
+								</Text>
+								<Text style={styles.lilText}>
+									Atualizado: {item.updated_at.split('T')[0]}
+								</Text>
+							</View>
+							<View style={[styles.row, { marginBottom: 15 }]}>
+								<TouchableOpacity
+									style={[
+										styles.button,
+										{ padding: 4, marginHorizontal: 6 },
+									]}
+									onPress={() =>
+										setModalVisible(!modalVisible)
+									}
+								>
+									<Text style={[styles.modalText]}>
+										Fechar
+									</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={[
+										styles.button,
+										{ padding: 4, marginHorizontal: 6 },
+									]}
+									onPress={async () => {
+										await fetch(
+											`https://2c61-168-232-160-61.sa.ngrok.io/api/scan/${item.id}`,
+											{
+												method: 'DELETE',
+												headers: {
+													Accept: 'application/json',
+													'Content-Type':
+														'application/json',
+												},
+											}
+										)
+											.then(
+												(
+													response: Response
+												): Promise<JSON> =>
+													response.json()
+											)
+											.then((json: JSON): void =>
+												window.alert(
+													'QRCode deletada com successo!'
+												)
+											)
+											.catch((error: Error): void =>
+												console.error(error)
+											)
+									}}
+								>
+									<Text style={[styles.modalText]}>
+										Deletar
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+				</Modal>
 			</View>
-		);
-	};
+		)
+	}
 
 	React.useEffect(() => {
-		getAllScans();
-		const headers = {
-			id: 'ID',
-			data: 'DATA',
-			qrType: 'TYPE',
-			created_at: 'CREATED AT',
-			updated_at: 'UPDATED AT',
-		};
-
-		data.push(headers);
-	}, []);
+		getAllScans()
+	}, [])
 
 	return (
 		<View style={[styles.container, { backgroundColor: '#fff' }]}>
@@ -143,12 +201,14 @@ export default function RestrictedPage({ navigation }: any) {
 			) : (
 				<View style={styles.container}>
 					<SearchBar
-						placeholder="Pesquisar QRCodes..."
+						placeholder='Pesquisar QRCodes...'
 						lightTheme
-						platform="android"
+						platform='android'
 						round
 						value={search}
-						onChangeText={(text) => searchFilterFunction(text)}
+						onChangeText={(text: string) =>
+							searchFilterFunction(text)
+						}
 						autoCorrect={false}
 						blurOnSubmit={true}
 						autoFocus={true}
@@ -159,16 +219,56 @@ export default function RestrictedPage({ navigation }: any) {
 
 					<View style={[styles.row, { marginBottom: 15 }]}>
 						<TouchableOpacity
-							style={[styles.button]}
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
 							onPress={() => navigation.navigate('Home')}
 						>
 							<Text style={[styles.listTitle]}> Home </Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							style={[styles.button]}
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
 							onPress={() => navigation.navigate('Scan')}
 						>
-							<Text style={[styles.listTitle]}> Scan </Text>
+							<Text style={[styles.listTitle]}> Scanner </Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[
+								styles.button,
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+							]}
+							onPress={async (): Promise<void> => {
+								await fetch(
+									'https://2c61-168-232-160-61.sa.ngrok.io/api/scans',
+									{
+										method: 'DELETE',
+										headers: {
+											Accept: 'application/json',
+											'Content-Type': 'application/json',
+										},
+									}
+								)
+									.then(
+										(response: Response): Promise<JSON> =>
+											response.json()
+									)
+									.then((json: JSON): void => {
+										window.alert(
+											'QRCodes deletadas com sucesso!'
+										)
+
+										getAllScans()
+									})
+									.catch((error: Error): void =>
+										console.error(error)
+									)
+							}}
+						>
+							<Text style={[styles.listTitle]}> Limpar </Text>
 						</TouchableOpacity>
 					</View>
 
@@ -178,9 +278,10 @@ export default function RestrictedPage({ navigation }: any) {
 						keyExtractor={(item) => item.id}
 						scrollEnabled={true}
 						bounces={true}
+						showsVerticalScrollIndicator={false}
 					/>
 				</View>
 			)}
 		</View>
-	);
+	)
 }
