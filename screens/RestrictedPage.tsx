@@ -79,7 +79,6 @@ const RestrictedPage = ({ navigation }: any) => {
 					// console.table(data)
 				})
 				.catch((error: Error): void => console.error(error))
-				.finally((): void => setLoading(false))
 		} catch (error) {
 			console.error(error)
 		}
@@ -225,7 +224,7 @@ const RestrictedPage = ({ navigation }: any) => {
 									]}
 									onPress={async () => {
 										await fetch(
-											`https://qr-code-etec.herokuapp.com/api/scan/${item.id}`,
+											`https://qr-code-etec.herokuapp.com/api/scan/${item.id_qrcode}`,
 											{
 												method: 'DELETE',
 												headers: {
@@ -355,7 +354,7 @@ const RestrictedPage = ({ navigation }: any) => {
 					<FlatList
 						data={filtered}
 						renderItem={renderItem}
-						keyExtractor={(item) => item.id_qrcode}
+						keyExtractor={(item: { id_qrcode: string }) => item.id_qrcode}
 						scrollEnabled={true}
 						bounces={true}
 						showsVerticalScrollIndicator={false}
