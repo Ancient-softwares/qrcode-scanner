@@ -44,7 +44,7 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	const getAllScans = async () => {
-		await fetch('https://2c61-168-232-160-61.sa.ngrok.io/api/scans', {
+		await fetch('https://qr-code-etec.herokuapp.com/api/scans', {
 			method: 'GET',
 			mode: 'no-cors',
 			headers: {
@@ -152,7 +152,7 @@ export default function RestrictedPage({ navigation }: any) {
 									]}
 									onPress={async () => {
 										await fetch(
-											`https://2c61-168-232-160-61.sa.ngrok.io/api/scan/${item.id}`,
+											`https://qr-code-etec.herokuapp.com/api/scan/${item.id}`,
 											{
 												method: 'DELETE',
 												headers: {
@@ -243,7 +243,7 @@ export default function RestrictedPage({ navigation }: any) {
 							]}
 							onPress={async (): Promise<void> => {
 								await fetch(
-									'https://2c61-168-232-160-61.sa.ngrok.io/api/scans',
+									`https://qr-code-etec.herokuapp.com/api/scans`,
 									{
 										method: 'DELETE',
 										headers: {
