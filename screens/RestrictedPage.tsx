@@ -5,7 +5,7 @@ import {
 	Modal,
 	Text,
 	TouchableOpacity,
-	View,
+	View
 } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
@@ -18,7 +18,7 @@ export default function RestrictedPage({ navigation }: any) {
 	const [loading, setLoading] = React.useState<boolean>(true)
 	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
 
-	const searchFilterFunction = (text: string) => {
+	const searchFilterFunction = (text) => {
 		// Check if searched text is not blank
 		if (text) {
 			// Inserted text is not blank
@@ -44,13 +44,13 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	const getAllScans = async () => {
-		await fetch('https://2c61-168-232-160-61.sa.ngrok.io/api/scans', {
+		await fetch('https://qr-code-etec.herokuapp.com//api/scans', {
 			method: 'GET',
 			mode: 'no-cors',
 			headers: {
 				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
+				Accept: 'application/json'
+			}
 		})
 			.then((response: Response): Promise<JSON> => response.json())
 			.then((json: any): void => {
@@ -76,8 +76,8 @@ export default function RestrictedPage({ navigation }: any) {
 						styles.item,
 						{
 							width: '100%',
-							alignItems: 'flex-start',
-						},
+							alignItems: 'flex-start'
+						}
 					]}
 					onPress={() => {
 						setModalVisible(true)
@@ -115,7 +115,7 @@ export default function RestrictedPage({ navigation }: any) {
 
 							<View
 								style={{
-									alignItems: 'flex-start',
+									alignItems: 'flex-start'
 								}}
 							>
 								<Text style={styles.lilText}>
@@ -135,7 +135,7 @@ export default function RestrictedPage({ navigation }: any) {
 								<TouchableOpacity
 									style={[
 										styles.button,
-										{ padding: 4, marginHorizontal: 6 },
+										{ padding: 4, marginHorizontal: 6 }
 									]}
 									onPress={() =>
 										setModalVisible(!modalVisible)
@@ -148,18 +148,18 @@ export default function RestrictedPage({ navigation }: any) {
 								<TouchableOpacity
 									style={[
 										styles.button,
-										{ padding: 4, marginHorizontal: 6 },
+										{ padding: 4, marginHorizontal: 6 }
 									]}
 									onPress={async () => {
 										await fetch(
-											`https://2c61-168-232-160-61.sa.ngrok.io/api/scan/${item.id}`,
+											`https://qr-code-etec.herokuapp.com//api/scan/${item.id}`,
 											{
 												method: 'DELETE',
 												headers: {
 													Accept: 'application/json',
 													'Content-Type':
-														'application/json',
-												},
+														'application/json'
+												}
 											}
 										)
 											.then(
@@ -206,14 +206,12 @@ export default function RestrictedPage({ navigation }: any) {
 						platform='android'
 						round
 						value={search}
-						onChangeText={(text: string) =>
-							searchFilterFunction(text)
-						}
+						onChangeText={(text) => searchFilterFunction(text)}
 						autoCorrect={false}
 						blurOnSubmit={true}
 						autoFocus={true}
 						style={{
-							width: '72%',
+							width: '72%'
 						}}
 					/>
 
@@ -221,7 +219,7 @@ export default function RestrictedPage({ navigation }: any) {
 						<TouchableOpacity
 							style={[
 								styles.button,
-								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 }
 							]}
 							onPress={() => navigation.navigate('Home')}
 						>
@@ -230,7 +228,7 @@ export default function RestrictedPage({ navigation }: any) {
 						<TouchableOpacity
 							style={[
 								styles.button,
-								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 }
 							]}
 							onPress={() => navigation.navigate('Scan')}
 						>
@@ -239,7 +237,7 @@ export default function RestrictedPage({ navigation }: any) {
 						<TouchableOpacity
 							style={[
 								styles.button,
-								{ marginHorizontal: 5, paddingHorizontal: 7.5 },
+								{ marginHorizontal: 5, paddingHorizontal: 7.5 }
 							]}
 							onPress={async (): Promise<void> => {
 								await fetch(
@@ -248,8 +246,8 @@ export default function RestrictedPage({ navigation }: any) {
 										method: 'DELETE',
 										headers: {
 											Accept: 'application/json',
-											'Content-Type': 'application/json',
-										},
+											'Content-Type': 'application/json'
+										}
 									}
 								)
 									.then(

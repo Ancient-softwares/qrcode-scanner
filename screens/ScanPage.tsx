@@ -18,19 +18,23 @@ const App = (): JSX.Element => {
 		getBarCodeScannerPermissions()
 	}, [])
 
-	const sendMysql = async ({ data }: { data: string }): Promise<void> => {
-		const url = `https://2c61-168-232-160-61.sa.ngrok.io/api/scan`
+	const uploadScanToServer = async ({
+		data
+	}: {
+		data: string
+	}): Promise<void> => {
+		const url = `https://qr-code-etec.herokuapp.com/api/scan`
 
 		await fetch(url, {
 			method: 'post',
 			headers: {
 				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify({ data })
 		})
 			.then((response: Response): Promise<JSON> => response.json())
-			.then((response: JSON): void => {
+			.then((response: any): void => {
 				window.alert(`Operação: ${response.message}`)
 
 				console.log(response)
@@ -45,14 +49,14 @@ const App = (): JSX.Element => {
 			.finally(() => {
 				afterScan({
 					type: 0,
-					data: '',
+					data: ''
 				})
 			})
 	}
 
 	const afterScan = async ({
 		type,
-		data,
+		data
 	}: {
 		type: number
 		data: string
@@ -64,7 +68,7 @@ const App = (): JSX.Element => {
 
 	const handleBarCodeScanned = ({
 		type,
-		data,
+		data
 	}: {
 		type: number
 		data: string
@@ -74,7 +78,7 @@ const App = (): JSX.Element => {
 			`Bar code with type ${type} and data ${data} has been scanned!`
 		)
 
-		sendMysql({ type: type, data: data })
+		uploadScanToServer({ data })
 	}
 
 	if (hasPermission === null) {
