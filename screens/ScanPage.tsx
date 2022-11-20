@@ -89,10 +89,46 @@ const App = (): JSX.Element => {
 	}
 
 	return (
-		<View style={styles.container}>
+		<View
+			style={[
+				styles.container,
+				{
+					width: '100%',
+					height: '100%',
+					backgroundColor: 'transparent'
+				}
+			]}
+		>
 			<BarCodeScanner
 				onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-				style={StyleSheet.absoluteFillObject}
+				style={[
+					StyleSheet.absoluteFillObject,
+					styles.container,
+					{
+						zIndex: 1,
+						width: '100%',
+						height: '100%',
+						backgroundColor: 'transparent'
+					}
+				]}
+				children={
+					/* Displays a transparent square in the center */
+					<View
+						style={{
+							position: 'absolute',
+							flex: 1,
+							marginTop: '70%',
+							marginLeft: '20%',
+							width: '50%',
+							height: '15%',
+							backgroundColor: 'rgba(0,0,0,0.2)',
+							borderColor: 'white',
+							borderWidth: 2,
+							borderRadius: 10,
+							zIndex: 2
+						}}
+					></View>
+				}
 			/>
 			{scanned && (
 				<Button
