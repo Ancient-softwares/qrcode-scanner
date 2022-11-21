@@ -11,7 +11,7 @@ import { SearchBar } from 'react-native-elements'
 
 import styles from '../styles'
 
-export default function RestrictedPage({ navigation }: any) {
+const RestrictedPage = ({ navigation }: any) => {
 	const [data, setData] = React.useState<any[]>([])
 	const [filtered, setFiltered] = React.useState<any[]>([])
 	const [search, setSearch] = React.useState<string>('')
@@ -30,10 +30,11 @@ export default function RestrictedPage({ navigation }: any) {
 		if (text) {
 			// Inserted text is not blank
 			// Filter the masterDataSource and update FilteredDataSource
-			const newData = data.filter((item) => {
+			const newData = filtered.filter((item: any) => {
+				console.log(item)
 				// Applying filter for the inserted text in search bar
-				const itemData = item.data
-					? item.data.toUpperCase()
+				const itemData = item.id_qrcode
+					? item.id_qrcode.toUpperCase()
 					: ''.toUpperCase()
 
 				const textData = text.toUpperCase()
@@ -64,16 +65,16 @@ export default function RestrictedPage({ navigation }: any) {
 			})
 				.then((response: Response): Promise<JSON> => response.json())
 				.then((json: any): void => {
-					console.log(json.scans)
+					// console.log(json.scans)
 
 					json.scans.forEach((scan: Array<Object>) => {
 						data.push(scan)
 
-						console.log(scan)
+						// console.log(scan)
 					})
 
 					setFiltered(data)
-					console.table(data)
+					// console.table(data)
 				})
 				.catch((error: Error): void => console.error(error))
 				.finally((): void => setLoading(false))
@@ -105,21 +106,12 @@ export default function RestrictedPage({ navigation }: any) {
 							{ fontWeight: 'bold', fontSize: 16 }
 						]}
 					>
-						ID:
-					</Text>
-					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.id_qrcode}
-					</Text>
-					<Text
-						style={[
-							styles.title,
-							{ fontWeight: 'bold', fontSize: 16 }
-						]}
-					>
-						Código:
-					</Text>
-					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.codigo_qrcode}
+						ID:{' '}
+						<Text
+							style={[styles.headerText, { textAlign: 'left' }]}
+						>
+							{item.id_qrcode}
+						</Text>
 					</Text>
 					<Text
 						style={[
@@ -127,21 +119,12 @@ export default function RestrictedPage({ navigation }: any) {
 							{ fontWeight: 'bold', fontSize: 16 }
 						]}
 					>
-						Status:
-					</Text>
-					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.status_qrcode}
-					</Text>
-					<Text
-						style={[
-							styles.title,
-							{ fontWeight: 'bold', fontSize: 16 }
-						]}
-					>
-						Criado:
-					</Text>
-					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.created_at}
+						Código:{' '}
+						<Text
+							style={[styles.headerText, { textAlign: 'left' }]}
+						>
+							{item.codigo_qrcode}
+						</Text>
 					</Text>
 					<Text
 						style={[
@@ -149,10 +132,40 @@ export default function RestrictedPage({ navigation }: any) {
 							{ fontWeight: 'bold', fontSize: 16 }
 						]}
 					>
-						Atualizado:
+						Status:{' '}
+						<Text
+							style={[styles.headerText, { textAlign: 'left' }]}
+						>
+							{item.status_qrcode}
+						</Text>
 					</Text>
-					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.updated_at}
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Criado:{' '}
+						<Text
+							style={[styles.headerText, { textAlign: 'left' }]}
+						>
+							{item.created_at.substring(0, 10)} ({' '}
+							{item.created_at.substring(11, 19)} )
+						</Text>
+					</Text>
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Atualizado:{' '}
+						<Text
+							style={[styles.headerText, { textAlign: 'left' }]}
+						>
+							{item.updated_at.substring(0, 10)} ({' '}
+							{item.updated_at.substring(11, 19)} )
+						</Text>
 					</Text>
 				</TouchableOpacity>
 
@@ -348,3 +361,5 @@ export default function RestrictedPage({ navigation }: any) {
 		</View>
 	)
 }
+
+export default RestrictedPage

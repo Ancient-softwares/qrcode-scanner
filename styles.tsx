@@ -5,20 +5,22 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'center'
 	},
 
 	title: {
 		color: '#000',
 		fontSize: 25,
 		textAlign: 'center',
+		marginHorizontal: 12.5,
+		marginRight: 42.5,
 		marginTop: 25,
-		marginBottom: 10,
+		marginBottom: 10
 	},
 
 	listTitle: {
 		fontSize: 24,
-		textAlign: 'center',
+		textAlign: 'center'
 	},
 
 	textInputs: {
@@ -27,17 +29,17 @@ const styles = StyleSheet.create({
 		color: '#000',
 		borderRadius: 40,
 		paddingLeft: 25,
-		height: 60,
+		height: 60
 	},
 
 	answer: {
 		color: '#000',
 		fontSize: 25,
 		textAlign: 'center',
-		marginTop: 30,
+		marginTop: 30
 	},
 	lilMargin: {
-		margin: 15,
+		margin: 15
 	},
 	button: {
 		alignItems: 'center',
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginVertical: 10,
 		marginHorizontal: 15,
-		borderRadius: 10,
+		borderRadius: 10
 	},
 	item: {
 		backgroundColor: '#ddd',
@@ -53,58 +55,58 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		marginVertical: 5,
 		marginHorizontal: 15,
-		borderRadius: 10,
+		borderRadius: 10
 	},
 	image: {
 		width: '75%',
-		height: 235,
+		height: 235
 	},
 	bgimage: {
 		height: '100%',
-		width: '100%',
+		width: '100%'
 	},
 
 	headerText: {
 		fontSize: 16,
 		textAlign: 'center',
 		margin: 10,
-		fontWeight: 'bold',
+		fontWeight: 'bold'
 	},
 
 	headStyle: {
 		height: 50,
 		backgroundColor: '#f1f8ff',
-		alignContent: 'center',
+		alignContent: 'center'
 	},
 	cellStyle: {
 		margin: 10,
 		textAlign: 'center',
-		height: 40,
+		height: 40
 	},
 
 	rowText: {
 		textAlign: 'center',
-		margin: 10,
+		margin: 10
 	},
 
 	row: {
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'flex-start',
+		alignItems: 'flex-start'
 	},
 
 	lilText: {
 		fontSize: 16,
 		textAlign: 'center',
-		margin: 10,
+		margin: 10
 	},
 
 	centeredView: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 22,
+		marginTop: 22
 	},
 	modalView: {
 		margin: 20,
@@ -115,28 +117,28 @@ const styles = StyleSheet.create({
 		shadowColor: '#000',
 		shadowOffset: {
 			width: 0,
-			height: 2,
+			height: 2
 		},
 		shadowOpacity: 0.25,
 		shadowRadius: 4,
-		elevation: 5,
+		elevation: 5
 	},
 
 	buttonOpen: {
-		backgroundColor: '#F194FF',
+		backgroundColor: '#F194FF'
 	},
 	buttonClose: {
-		backgroundColor: '#2196F3',
+		backgroundColor: '#2196F3'
 	},
 	textStyle: {
 		color: 'white',
 		fontWeight: 'bold',
-		textAlign: 'center',
+		textAlign: 'center'
 	},
 	modalText: {
 		marginBottom: 15,
-		textAlign: 'center',
-	},
+		textAlign: 'center'
+	}
 })
 
 export default styles

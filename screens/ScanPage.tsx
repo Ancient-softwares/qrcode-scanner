@@ -1,13 +1,11 @@
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import React, { useEffect, useState } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import styles from '../styles'
 
-const App = (): JSX.Element => {
+const ScanPage = ({ navigation }: any): JSX.Element => {
 	const [hasPermission, setHasPermission] = useState<any>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
-	const [data, setData] = useState<string>('')
-	const [type, setType] = useState<number>(0)
 
 	useEffect((): void => {
 		const getBarCodeScannerPermissions = async () => {
@@ -36,34 +34,25 @@ const App = (): JSX.Element => {
 			.then((response: Response): Promise<JSON> => response.json())
 			.then((response: any): void => {
 				window.alert(`Operação: ${response.message}`)
+				afterScan()
 
 				console.log(response)
 			})
 			.catch((error) => {
-				window.alert(
-					`Server error: ${error}\nData scanner: ${data} - ${type}`
-				)
+				window.alert(`Server error: ${error}\nData scanner: ${data}`)
 
 				console.error(error)
 			})
 			.finally(() => {
-				afterScan({
-					type: 0,
-					data: ''
-				})
+				if (scanned) {
+					setScanned(false)
+				}
+				// afterScan()
 			})
 	}
 
-	const afterScan = async ({
-		type,
-		data
-	}: {
-		type: number
-		data: string
-	}): Promise<void> => {
-		setScanned(true)
-		setData(data)
-		setType(type)
+	const afterScan = async (): Promise<void> => {
+		setScanned(!scanned)
 	}
 
 	const handleBarCodeScanned = ({
@@ -81,6 +70,31 @@ const App = (): JSX.Element => {
 		uploadScanToServer({ data })
 	}
 
+	const handleAfterScan = (): JSX.Element => {
+		return (
+			<View style={[styles.container, { flexDirection: 'row' }]}>
+				<TouchableOpacity
+					style={[
+						styles.button,
+						{ marginHorizontal: 5, paddingHorizontal: 7.5 }
+					]}
+					onPress={() => navigation.navigate('Home')}
+				>
+					<Text style={[styles.listTitle]}> Home </Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={[
+						styles.button,
+						{ marginHorizontal: 5, paddingHorizontal: 7.5 }
+					]}
+					onPress={() => setScanned(true)}
+				>
+					<Text style={[styles.listTitle]}> Escanear </Text>
+				</TouchableOpacity>
+			</View>
+		)
+	}
+
 	if (hasPermission === null) {
 		return <Text>Requesting for camera permission</Text>
 	}
@@ -89,55 +103,57 @@ const App = (): JSX.Element => {
 	}
 
 	return (
-		<View
-			style={[
-				styles.container,
-				{
-					width: '100%',
-					height: '100%',
-					backgroundColor: 'transparent'
-				}
-			]}
-		>
-			<BarCodeScanner
-				onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-				style={[
-					StyleSheet.absoluteFillObject,
-					styles.container,
-					{
-						zIndex: 1,
-						width: '100%',
-						height: '100%',
-						backgroundColor: 'transparent'
-					}
-				]}
-				children={
-					/* Displays a transparent square in the center */
-					<View
-						style={{
-							position: 'absolute',
-							flex: 1,
-							marginTop: '70%',
-							marginLeft: '20%',
-							width: '50%',
-							height: '15%',
-							backgroundColor: 'rgba(0,0,0,0.2)',
-							borderColor: 'white',
-							borderWidth: 2,
-							borderRadius: 10,
-							zIndex: 2
-						}}
-					></View>
-				}
-			/>
-			{scanned && (
-				<Button
-					title={'Tap to Scan Again'}
-					onPress={() => setScanned(false)}
-				/>
+		<>
+			{!scanned ? (
+				handleAfterScan()
+			) : (
+				<View
+					style={[
+						styles.container,
+						{
+							width: '100%',
+							height: '100%',
+							backgroundColor: 'transparent'
+						}
+					]}
+				>
+					<BarCodeScanner
+						onBarCodeScanned={
+							!scanned ? undefined : handleBarCodeScanned
+						}
+						style={[
+							StyleSheet.absoluteFillObject,
+							styles.container,
+							{
+								zIndex: 1,
+								width: '100%',
+								height: '100%',
+								backgroundColor: 'transparent'
+							}
+						]}
+						children={
+							/* Displays a transparent square in the center */
+							<View
+								style={{
+									position: 'absolute',
+									flex: 1,
+									marginTop: '70%',
+									marginLeft: '20%',
+									width: '50%',
+									height: '15%',
+									backgroundColor: 'rgba(0,0,0,0.2)',
+									borderColor: 'white',
+									borderWidth: 2,
+									borderRadius: 10,
+									zIndex: 2
+								}}
+							></View>
+						}
+					/>
+				</View>
 			)}
-		</View>
+		</>
 	)
 }
 
-export default App
+export default ScanPage
