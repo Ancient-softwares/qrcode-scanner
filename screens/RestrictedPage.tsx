@@ -17,8 +17,15 @@ export default function RestrictedPage({ navigation }: any) {
 	const [search, setSearch] = React.useState<string>('')
 	const [loading, setLoading] = React.useState<boolean>(true)
 	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
+	const [modalData, setModalData] = React.useState<any>({
+		id_qrcode: '',
+		codigo_qrcode: '',
+		status_qrcode: '',
+		created_at: '',
+		updated_at: ''
+	})
 
-	const searchFilterFunction = (text) => {
+	const searchFilterFunction = (text: string) => {
 		// Check if searched text is not blank
 		if (text) {
 			// Inserted text is not blank
@@ -44,28 +51,35 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	const getAllScans = async () => {
-		await fetch('https://qr-code-etec.herokuapp.com//api/scans', {
-			method: 'GET',
-			mode: 'no-cors',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json'
-			}
-		})
-			.then((response: Response): Promise<JSON> => response.json())
-			.then((json: any): void => {
-				console.log(json.scans)
+		try {
+			setData([])
 
-				json.scans.forEach((scan: Array<Object>) => {
-					data.push(scan)
-
-					console.log(scan)
-				})
-
-				console.table(data)
+			await fetch('https://qr-code-etec.herokuapp.com/api/scans', {
+				method: 'GET',
+				mode: 'no-cors',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
 			})
-			.catch((error: Error): void => console.error(error))
-			.finally((): void => setLoading(false))
+				.then((response: Response): Promise<JSON> => response.json())
+				.then((json: any): void => {
+					console.log(json.scans)
+
+					json.scans.forEach((scan: Array<Object>) => {
+						data.push(scan)
+
+						console.log(scan)
+					})
+
+					setFiltered(data)
+					console.table(data)
+				})
+				.catch((error: Error): void => console.error(error))
+				.finally((): void => setLoading(false))
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	const renderItem = ({ item }: { item: any }): JSX.Element => {
@@ -80,20 +94,65 @@ export default function RestrictedPage({ navigation }: any) {
 						}
 					]}
 					onPress={() => {
+						setModalData(item)
+						console.log('modal data', modalData)
 						setModalVisible(true)
 					}}
 				>
-					<Text style={[styles.title, { fontWeight: 'bold' }]}>
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
 						ID:
 					</Text>
 					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.id}
+						{item.id_qrcode}
 					</Text>
-					<Text style={[styles.title, { fontWeight: 'bold' }]}>
-						Valor:
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Código:
 					</Text>
 					<Text style={[styles.headerText, { textAlign: 'left' }]}>
-						{item.data}
+						{item.codigo_qrcode}
+					</Text>
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Status:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
+						{item.status_qrcode}
+					</Text>
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Criado:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
+						{item.created_at}
+					</Text>
+					<Text
+						style={[
+							styles.title,
+							{ fontWeight: 'bold', fontSize: 16 }
+						]}
+					>
+						Atualizado:
+					</Text>
+					<Text style={[styles.headerText, { textAlign: 'left' }]}>
+						{item.updated_at}
 					</Text>
 				</TouchableOpacity>
 
@@ -119,16 +178,20 @@ export default function RestrictedPage({ navigation }: any) {
 								}}
 							>
 								<Text style={styles.lilText}>
-									ID: {item.id}
+									ID: {modalData.id_qrcode}
 								</Text>
 								<Text style={styles.lilText}>
-									Valor: {item.data}
+									Valor: {modalData.codigo_qrcode}
 								</Text>
 								<Text style={styles.lilText}>
-									Criado: {item.created_at.split('T')[0]}
+									Status: {modalData.status_qrcode}
 								</Text>
 								<Text style={styles.lilText}>
-									Atualizado: {item.updated_at.split('T')[0]}
+									Criado: {modalData.created_at.split('T')[0]}
+								</Text>
+								<Text style={styles.lilText}>
+									Atualizado:{' '}
+									{modalData.updated_at.split('T')[0]}
 								</Text>
 							</View>
 							<View style={[styles.row, { marginBottom: 15 }]}>
@@ -152,7 +215,7 @@ export default function RestrictedPage({ navigation }: any) {
 									]}
 									onPress={async () => {
 										await fetch(
-											`https://qr-code-etec.herokuapp.com//api/scan/${item.id}`,
+											`https://qr-code-etec.herokuapp.com/api/scan/${item.id}`,
 											{
 												method: 'DELETE',
 												headers: {
@@ -191,8 +254,10 @@ export default function RestrictedPage({ navigation }: any) {
 	}
 
 	React.useEffect(() => {
-		getAllScans()
-	}, [])
+		navigation.addListener('focus', () => {
+			getAllScans()
+		})
+	}, [navigation])
 
 	return (
 		<View style={[styles.container, { backgroundColor: '#fff' }]}>
@@ -241,7 +306,7 @@ export default function RestrictedPage({ navigation }: any) {
 							]}
 							onPress={async (): Promise<void> => {
 								await fetch(
-									'https://2c61-168-232-160-61.sa.ngrok.io/api/scans',
+									'https://qr-code-etec.herokuapp.com/api/scans',
 									{
 										method: 'DELETE',
 										headers: {
@@ -273,7 +338,7 @@ export default function RestrictedPage({ navigation }: any) {
 					<FlatList
 						data={filtered}
 						renderItem={renderItem}
-						keyExtractor={(item) => item.id}
+						keyExtractor={(item) => item.id_qrcode}
 						scrollEnabled={true}
 						bounces={true}
 						showsVerticalScrollIndicator={false}
