@@ -1,32 +1,34 @@
 {
-	"expo": {
-		"name": "qrcode-reader",
-		"slug": "qrcode-reader",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/qr-code.png",
-		"userInterfaceStyle": "light",
-		"splash": {
-			"image": "./assets/qr-code.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/qr-code-icon.png",
-				"backgroundColor": "#FFFFFF"
-			},
-			"package": "com.athirson.qrcodereader"
-		},
-		"web": {
-			"favicon": "./assets/qr-code.png"
-		}
-	}
+  "expo": {
+    "name": "qrcode-reader",
+    "slug": "qrcode-reader",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.etec.qrcode"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
 }
