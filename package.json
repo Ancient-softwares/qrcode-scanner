@@ -10,7 +10,9 @@
 		"android": "expo start --android",
 		"ios": "expo start --ios",
 		"web": "expo start --web",
-		"production": "NODE_OPTIONS=--openssl-legacy-provider expo start --web"
+		"bash": "NODE_OPTIONS=--openssl-legacy-provider expo start --web",
+		"cmd": "set NODE_OPTIONS=--openssl-legacy-provider npx expo start --web",
+		"powershell": "$env:NODE_OPTIONS=--openssl-legacy-provider; expo start --web"
 	},
 	"dependencies": {
 		"@expo/webpack-config": "^0.17.0",
@@ -26,6 +28,7 @@
 		"@types/react-dom": "^18.0.6",
 		"@types/react-native": "~0.69.1",
 		"axios": "^0.27.2",
+		"bootstrap": "^5.2.3",
 		"browserify-zlib": "^0.1.4",
 		"buffer": "^4.9.1",
 		"cors": "^2.8.5",
@@ -47,6 +50,7 @@
 		"path-browserify": "^0.0.0",
 		"punycode": "^1.2.4",
 		"react": "18.0.0",
+		"react-bootstrap": "^2.6.0",
 		"react-dom": "18.0.0",
 		"react-native": "0.69.5",
 		"react-native-crypto": "^2.2.0",
