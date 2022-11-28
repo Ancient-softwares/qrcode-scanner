@@ -29,7 +29,7 @@ const App = ({ navigation }: any): JSX.Element => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				data
+				data: data
 			})
 		})
 			.then((response: Response): Promise<JSON> => response.json())
@@ -100,11 +100,6 @@ const App = ({ navigation }: any): JSX.Element => {
 				>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<Text
-								style={[styles.listTitle, { marginBottom: 15 }]}
-							>
-								QRCode escaneado com sucesso!
-							</Text>
 							<Text
 								style={[
 									styles.lilText,

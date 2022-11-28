@@ -3,6 +3,7 @@ import {
 	ActivityIndicator,
 	FlatList,
 	Modal,
+	RefreshControl,
 	Text,
 	TouchableOpacity,
 	View
@@ -13,6 +14,8 @@ import styles from '../styles'
 
 const RestrictedPage = ({ navigation }: any) => {
 	const [data, setData] = React.useState<any[]>([])
+	const scans: any[] = []
+	const [refresh, setRefresh] = React.useState<boolean>(false)
 	const [filtered, setFiltered] = React.useState<any[]>([])
 	const [search, setSearch] = React.useState<string>('')
 	const [loading, setLoading] = React.useState<boolean>(true)
@@ -21,8 +24,7 @@ const RestrictedPage = ({ navigation }: any) => {
 		id_qrcode: '',
 		codigo_qrcode: '',
 		status_qrcode: '',
-		created_at: '',
-		updated_at: ''
+		created_at: ''
 	})
 
 	const searchFilterFunction = (text: string) => {
@@ -31,10 +33,10 @@ const RestrictedPage = ({ navigation }: any) => {
 			// Inserted text is not blank
 			// Filter the masterDataSource and update FilteredDataSource
 			const newData = filtered.filter((item: any) => {
-				console.log(item)
+				console.log(item.nome_evento)
 				// Applying filter for the inserted text in search bar
-				const itemData = item.id_qrcode
-					? item.id_qrcode.toUpperCase()
+				const itemData = item.nome_evento
+					? item.nome_evento.toUpperCase()
 					: ''.toUpperCase()
 
 				const textData = text.toUpperCase()
@@ -53,8 +55,6 @@ const RestrictedPage = ({ navigation }: any) => {
 
 	const getAllScans = async () => {
 		try {
-			setData([])
-
 			await fetch('https://qr-code-etec.herokuapp.com/api/scans', {
 				method: 'GET',
 				mode: 'no-cors',
@@ -66,14 +66,16 @@ const RestrictedPage = ({ navigation }: any) => {
 				.then((response: Response): Promise<JSON> => response.json())
 				.then((json: any): void => {
 					// console.log(json.scans)
-
 					json.scans.forEach((scan: Array<Object>) => {
-						data.push(scan)
+						scans.push(scan)
 
 						// console.log(scan)
 					})
 
-					setFiltered(data)
+					setRefresh(false)
+					setData(scans)
+					setFiltered(scans)
+					setLoading(false)
 					// console.table(data)
 				})
 				.catch((error: Error): void => console.error(error))
@@ -145,12 +147,11 @@ const RestrictedPage = ({ navigation }: any) => {
 							{ fontWeight: 'bold', fontSize: 16 }
 						]}
 					>
-						Criado:{' '}
+						Evento:{' '}
 						<Text
 							style={[styles.headerText, { textAlign: 'left' }]}
 						>
-							{item.created_at.substring(0, 10)} ({' '}
-							{item.created_at.substring(11, 19)} )
+							{item.nome_evento}
 						</Text>
 					</Text>
 					<Text
@@ -159,12 +160,12 @@ const RestrictedPage = ({ navigation }: any) => {
 							{ fontWeight: 'bold', fontSize: 16 }
 						]}
 					>
-						Atualizado:{' '}
+						Criado:{' '}
 						<Text
 							style={[styles.headerText, { textAlign: 'left' }]}
 						>
-							{item.updated_at.substring(0, 10)} ({' '}
-							{item.updated_at.substring(11, 19)} )
+							{item.created_at.substring(0, 10)} ({' '}
+							{item.created_at.substring(11, 19)} )
 						</Text>
 					</Text>
 				</TouchableOpacity>
@@ -201,10 +202,6 @@ const RestrictedPage = ({ navigation }: any) => {
 								</Text>
 								<Text style={styles.lilText}>
 									Criado: {modalData.created_at.split('T')[0]}
-								</Text>
-								<Text style={styles.lilText}>
-									Atualizado:{' '}
-									{modalData.updated_at.split('T')[0]}
 								</Text>
 							</View>
 							<View style={[styles.row, { marginBottom: 15 }]}>
@@ -270,7 +267,7 @@ const RestrictedPage = ({ navigation }: any) => {
 		navigation.addListener('focus', () => {
 			getAllScans()
 		})
-	}, [navigation])
+	}, [navigation, filtered])
 
 	return (
 		<View style={[styles.container, { backgroundColor: '#fff' }]}>
@@ -284,7 +281,14 @@ const RestrictedPage = ({ navigation }: any) => {
 						platform='android'
 						round
 						value={search}
-						onChangeText={(text) => searchFilterFunction(text)}
+						onChangeText={(text: string): void => {
+							if (text.length === 0) {
+								console.log(data)
+								setFiltered(data)
+							}
+
+							searchFilterFunction(text)
+						}}
 						autoCorrect={false}
 						blurOnSubmit={true}
 						autoFocus={true}
@@ -355,6 +359,13 @@ const RestrictedPage = ({ navigation }: any) => {
 						scrollEnabled={true}
 						bounces={true}
 						showsVerticalScrollIndicator={false}
+						refreshControl={
+							<RefreshControl
+								refreshing={refresh}
+								onRefresh={getAllScans}
+								enabled={true}
+							/>
+						}
 					/>
 				</View>
 			)}
