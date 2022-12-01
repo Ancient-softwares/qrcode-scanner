@@ -23,35 +23,33 @@ const App = ({ navigation }: any): JSX.Element => {
 		const url = `https://qr-code-etec.herokuapp.com/api/scan`
 
 		try {
-
-		
-		await fetch(url, {
-			method: 'post',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				data: data
-			})
-		})
-			.then((response: Response): Promise<JSON> => response.json())
-			.then((response: any): void => {
-				setMessage(response.message)
-				console.log(response)
-
-				afterScan({
-					data: '',
-					type: 0
+			await fetch(url, {
+				method: 'post',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					data: data
 				})
 			})
-			.catch((error) => {
-				window.alert(
-					`Server error: ${error}\nData scanner: ${data} - ${type}`
-				)
+				.then((response: Response): Promise<JSON> => response.json())
+				.then((response: any): void => {
+					setMessage(response.message)
+					console.log(response)
 
-				console.error(error)
-			})
+					afterScan({
+						data: '',
+						type: 0
+					})
+				})
+				.catch((error) => {
+					window.alert(
+						`Server error: ${error}\nData scanner: ${data} - ${type}`
+					)
+
+					console.error(error)
+				})
 		} catch (error) {
 			window.alert(
 				`Server error: ${error}\nData scanner: ${data} - ${type}`

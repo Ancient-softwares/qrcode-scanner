@@ -354,7 +354,9 @@ const RestrictedPage = ({ navigation }: any) => {
 					<FlatList
 						data={filtered}
 						renderItem={renderItem}
-						keyExtractor={(item: { id_qrcode: string }) => item.id_qrcode}
+						keyExtractor={(item: { id_qrcode: string }) =>
+							item.id_qrcode
+						}
 						scrollEnabled={true}
 						bounces={true}
 						showsVerticalScrollIndicator={false}
