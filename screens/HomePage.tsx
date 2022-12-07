@@ -1,12 +1,6 @@
-import React from 'react';
-import {
-	Text,
-	View,
-	TouchableOpacity,
-	SafeAreaView,
-	Image,
-} from 'react-native';
-import styles from '../styles';
+import React from 'react'
+import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import styles from '../styles'
 
 export default function HomePage({ navigation }: { navigation: any }) {
 	return (
@@ -19,7 +13,7 @@ export default function HomePage({ navigation }: { navigation: any }) {
 			<Text
 				style={[
 					styles.listTitle,
-					{ fontWeight: 'bold', marginBottom: 15 },
+					{ fontWeight: 'bold', marginBottom: 15 }
 				]}
 			>
 				Bem vindo ao Scanner 2000!
@@ -44,11 +38,11 @@ export default function HomePage({ navigation }: { navigation: any }) {
 			<Text
 				style={[
 					styles.lilText,
-					{ fontWeight: 'normal', marginTop: 80 },
+					{ fontWeight: 'normal', marginTop: 80 }
 				]}
 			>
 				Copyrights @ 2022 - Etec de Guaianazes
 			</Text>
 		</SafeAreaView>
-	);
+	)
 }

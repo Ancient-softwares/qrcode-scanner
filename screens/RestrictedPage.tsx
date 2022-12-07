@@ -26,6 +26,7 @@ const RestrictedPage = ({ navigation }: any) => {
 		status_qrcode: '',
 		created_at: ''
 	})
+	const url = 'https://qr-code-etec.herokuapp.com/api'
 
 	const searchFilterFunction = (text: string) => {
 		// Check if searched text is not blank
@@ -55,7 +56,7 @@ const RestrictedPage = ({ navigation }: any) => {
 
 	const getAllScans = async () => {
 		try {
-			await fetch('https://qr-code-etec.herokuapp.com/api/scans', {
+			await fetch(`${url}/scans`, {
 				method: 'GET',
 				mode: 'no-cors',
 				headers: {
@@ -224,17 +225,14 @@ const RestrictedPage = ({ navigation }: any) => {
 										{ padding: 4, marginHorizontal: 6 }
 									]}
 									onPress={async () => {
-										await fetch(
-											`https://qr-code-etec.herokuapp.com/api/scan/${item.id}`,
-											{
-												method: 'DELETE',
-												headers: {
-													Accept: 'application/json',
-													'Content-Type':
-														'application/json'
-												}
+										await fetch(`${url}/scan/${item.id}`, {
+											method: 'DELETE',
+											headers: {
+												Accept: 'application/json',
+												'Content-Type':
+													'application/json'
 											}
-										)
+										})
 											.then(
 												(
 													response: Response
@@ -322,16 +320,13 @@ const RestrictedPage = ({ navigation }: any) => {
 								{ marginHorizontal: 5, paddingHorizontal: 7.5 }
 							]}
 							onPress={async (): Promise<void> => {
-								await fetch(
-									'https://qr-code-etec.herokuapp.com/api/scans',
-									{
-										method: 'DELETE',
-										headers: {
-											Accept: 'application/json',
-											'Content-Type': 'application/json'
-										}
+								await fetch(`${url}/scans`, {
+									method: 'DELETE',
+									headers: {
+										Accept: 'application/json',
+										'Content-Type': 'application/json'
 									}
-								)
+								})
 									.then(
 										(response: Response): Promise<JSON> =>
 											response.json()
